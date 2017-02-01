@@ -28,7 +28,7 @@ $timestamp_all_day = $timestamp_all / 86400;
     </p>
     <?php endif ?>
     <?= Html::tag('p', Html::img($model->img), ['class' => 'img']) ?>
-    <?= Html::tag('p', Html::encode($model->timestamp_reg), ['class' => 'img']) ?>
+    <?= Html::tag('p', Html::encode($model->datetime_reg), ['class' => 'img']) ?>
     <div class="progress">
       <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
         <?= Html::tag('span', Html::encode($model->datetime_end), ['class' => 'sr-only']) ?>
