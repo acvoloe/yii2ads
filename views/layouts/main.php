@@ -39,6 +39,7 @@ AppAsset::register($this);
     } else {
         $menuItems = [
             ['label' => 'Главная', 'url' => ['/banner/index']],
+            ['label' => 'Сменить пароль', 'url' => ['/site/reset-password-user']],
         ];
         if (Yii::$app->user->identity->status == 20) {
             $menuItems[] = ['label' => 'Регистрация пользователя', 'url' => ['/site/signup']];

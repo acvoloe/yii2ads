@@ -11,6 +11,7 @@ use app\models\LoginForm;
 use app\models\PasswordResetRequestForm;
 use app\models\ResetPasswordForm;
 use app\models\SignupForm;
+use app\models\ResetPasswordFormUser;
 
 /**
  * Site controller
@@ -25,7 +26,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'signup'],
+                'only' => ['logout', 'signup','reset-password-user'],
                 'rules' => [
                     [
                         'actions' => ['signup'],
@@ -36,7 +37,7 @@ class SiteController extends Controller
                         },
                     ],
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout','reset-password-user'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -166,6 +167,21 @@ class SiteController extends Controller
         }
 
         return $this->render('resetPassword', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionResetPasswordUser()
+    {
+        $model = new ResetPasswordFormUser(Yii::$app->user->identity->id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
+            Yii::$app->session->setFlash('success', 'New password was saved.');
+
+            return $this->goHome();
+        }
+
+        return $this->render('resetPasswordUser', [
             'model' => $model,
         ]);
     }
