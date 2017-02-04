@@ -9,8 +9,9 @@ use yii\widgets\DetailView;
 $this->title = 'Баннер';
 $this->params['breadcrumbs'][] = ['label' => 'Banners', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
-$timestamp_all = Yii::$app->formatter->asDate($model->datetime_end, 'php:U') - Yii::$app->formatter->asDate($model->datetime_reg, 'php:U');
-$timestamp_all_day = $timestamp_all / 86400;
+$UnixTime_reg = $model->UnixTime($model->datetime_reg);
+$UnixTime_end = $model->UnixTime($model->datetime_end);
+$total = 100 - round((($UnixTime_end - time())*100)/($UnixTime_end-$UnixTime_reg));
 ?>
 <div class="banner-view">
 
@@ -28,10 +29,9 @@ $timestamp_all_day = $timestamp_all / 86400;
     </p>
     <?php endif ?>
     <?= Html::tag('p', Html::img($model->img), ['class' => 'img']) ?>
-    <?= Html::tag('p', Html::encode($model->datetime_reg), ['class' => 'img']) ?>
     <div class="progress">
-      <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-        <?= Html::tag('span', Html::encode($model->datetime_end), ['class' => 'sr-only']) ?>
+    <?= Html::tag('div', Html::encode($total), ['role' => 'progressbar','aria-valuenow' => '$total','aria-valuemax' => '100', 'class' => 'progress-bar']) ?>
+      <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
       </div>
     </div>
     <?= DetailView::widget([
