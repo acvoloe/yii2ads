@@ -61,6 +61,11 @@ class Banner extends \yii\db\ActiveRecord
         return Yii::$app->formatter->asDate($time, 'php:U');
     }
 
+    public function Date($time)
+    {
+        return Yii::$app->formatter->asDate($time, 'php:d.m.Y');
+    }
+
     /**
      * @inheritdoc
      */

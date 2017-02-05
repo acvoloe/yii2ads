@@ -12,6 +12,10 @@ $this->params['breadcrumbs'][] = $this->title;
 $UnixTime_reg = $model->UnixTime($model->datetime_reg);
 $UnixTime_end = $model->UnixTime($model->datetime_end);
 $total = 100 - round((($UnixTime_end - time())*100)/($UnixTime_end-$UnixTime_reg));
+if ($total > 100) $total=100;
+$model->datetime_reg = $model->Date($model->datetime_reg);
+$model->datetime_end = $model->Date($model->datetime_end);
+$CTR = round(($model->click / $model->views )* 100);
 ?>
 <div class="banner-view">
 
@@ -28,28 +32,48 @@ $total = 100 - round((($UnixTime_end - time())*100)/($UnixTime_end-$UnixTime_reg
         ]) ?>
     </p>
     <?php endif ?>
-    <?= Html::tag('p', Html::img($model->img), ['class' => 'img']) ?>
-    <div class="progress">
-    <?= Html::tag('div', Html::encode($total), ['role' => 'progressbar','aria-valuenow' => '$total','aria-valuemax' => '100', 'class' => 'progress-bar']) ?>
-      <div class="progress-bar" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-      </div>
+    
+    <div class="row">
+        <div class="col-md-5">
+            <?= Html::tag('p', Html::img($model->img, ['width' => '100%']), ['class' => 'img']) ?>
+        </div>
+        <div class="col-md-5">
+            <?= Html::tag('p', Html::encode($model->link)) ?>
+        </div>
     </div>
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            //'id',
-            'img:image',
-            'link:ntext',
-            'position',
-            //'user_to',
-            'datetime_reg:timestamp',
-            'datetime_end:timestamp',
-            'views',
-            'click',
-            //'rate',
-            'status',
-        ],
-    ]) ?>
+    <div class="row">
+        <div class="col-md-6">
+            <p>Срок действия с <?= Html::encode($model->datetime_reg)?> по <?= Html::encode($model->datetime_end)?> </p>
+            <div class="progress">
+                <?= Html::tag('div', Html::encode($total . '%'), ['role' => 'progressbar','aria-valuemin' => '0', 'aria-valuenow' => $total,'aria-valuemax' => '100','style' => 'width:'. $total .'%', 'class' => 'progress-bar']) ?>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    // 'id',
+                    // 'img:image',
+                    // 'link:ntext',
+                    // 'position',
+                    // 'user_to',
+                    // 'datetime_reg:timestamp',
+                    // 'datetime_end:timestamp',
+                    'views',
+                    'click',
+                    [
+                        'label' => 'CTR',
+                        'format' => 'text',
+                        'value' => $CTR . '%',
+                    ],
+                    //'rate',
+                    //'status',
+                ],
+            ]) ?>
+        </div>
+    </div>
 
 </div>
 
