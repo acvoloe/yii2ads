@@ -28,8 +28,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             'datetime_end:date',
-            'views',
-            'click',
+            [
+                'attribute' => 'views',
+                'value' => function ($data) {
+                   return round($data->views * $data->rate);
+                },
+            ],
+            [
+                'attribute' => 'click',
+                'value' => function ($data) {
+                   return round($data->click * $data->rate);
+                },
+            ],
             [
                 'attribute' => 'status',
                 'value' => function ($data) {

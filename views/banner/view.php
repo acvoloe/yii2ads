@@ -15,7 +15,9 @@ $total = 100 - round((($UnixTime_end - time())*100)/($UnixTime_end-$UnixTime_reg
 if ($total > 100) $total=100;
 $model->datetime_reg = $model->Date($model->datetime_reg);
 $model->datetime_end = $model->Date($model->datetime_end);
-$CTR = round(($model->click / $model->views )* 100);
+$view = round($model->views * $model->rate);
+$click = round($model->click * $model->rate);
+$CTR = round(($click / $view * 100), 2);
 ?>
 <div class="banner-view">
 
@@ -31,11 +33,29 @@ $CTR = round(($model->click / $model->views )* 100);
             ],
         ]) ?>
     </p>
+    <div class="row">
+    <p style="color: red">Здесь видны настоящие данные</p>
+        <div class="col-md-6">
+            <p>
+                <?= DetailView::widget([
+                        'model' => $model,
+                        'attributes' => [
+                            'rate',
+                            'views',
+                            'click',
+                            //'status',
+                        ],
+                    ]) ?>
+            </p>
+        </div>
+    </div>
+    <hr>
+    
     <?php endif ?>
     
     <div class="row">
         <div class="col-md-5">
-            <?= Html::tag('p', Html::img($model->img, ['width' => '100%']), ['class' => 'img']) ?>
+            <?= Html::tag('p', Html::img($model->img), ['class' => 'img']) ?>
         </div>
         <div class="col-md-5">
             <?= Html::tag('p', Html::encode($model->link)) ?>
@@ -61,15 +81,24 @@ $CTR = round(($model->click / $model->views )* 100);
                     // 'user_to',
                     // 'datetime_reg:timestamp',
                     // 'datetime_end:timestamp',
-                    'views',
-                    'click',
+                    //'views',
+                    //'click',
+                    [
+                        'label' => 'Просмотры',
+                        'format' => 'text',
+                        'value' => $view,
+                    ],
+                    [
+                        'label' => 'Клики',
+                        'format' => 'text',
+                        'value' => $click,
+                    ],
                     [
                         'label' => 'CTR',
                         'format' => 'text',
                         'value' => $CTR . '%',
                     ],
                     //'rate',
-                    //'status',
                 ],
             ]) ?>
         </div>
